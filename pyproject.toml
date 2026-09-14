@@ -1,0 +1,6 @@
+[project]
+name = "aegis-soc"
+version = "1.0.0"
+description = "Offline evidence-first SOC hackathon demo"
+requires-python = ">=3.11"
+dependencies = []

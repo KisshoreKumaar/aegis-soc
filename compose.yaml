@@ -1,0 +1,24 @@
+services:
+  aegis:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      AEGIS_API_TOKEN: ${AEGIS_API_TOKEN:?Run python3 scripts/manage.py token to initialize .env}
+      AEGIS_AUDIT_KEY: ${AEGIS_AUDIT_KEY:-}
+      AEGIS_IDENTITIES: ${AEGIS_IDENTITIES:-[]}
+      AEGIS_TWO_PERSON: ${AEGIS_TWO_PERSON:-false}
+      AEGIS_RATE_LIMIT: ${AEGIS_RATE_LIMIT:-240}
+    volumes:
+      - aegis-data:/app/data
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+volumes:
+  aegis-data:
